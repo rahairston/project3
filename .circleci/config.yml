@@ -79,7 +79,9 @@ jobs:
           command: |
             cd frontend
             npm run test
-                
+      - store_test_results:
+          path: /tmp/test-reports/jest/
+           
   test-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -92,6 +94,8 @@ jobs:
           command: |
             cd backend
             npm run test
+      - store_test_results:
+          path: /tmp/test-reports/jest/
             
   scan-frontend:
     docker:
@@ -104,7 +108,7 @@ jobs:
           name: Scan front-end
           command: |
             cd frontend
-            npm audit --audit-level=critical
+            npm audit fix --audit-level=critical --force
 
   scan-backend:
     docker:
@@ -117,7 +121,7 @@ jobs:
           name: /Scan back-end
           command: |
             cd backend
-            npm audit --audit-level=critical
+            npm audit fix --audit-level=critical --force
 
   deploy-infrastructure:
     docker:
