@@ -79,8 +79,6 @@ jobs:
           command: |
             cd frontend
             npm run test
-      - store_test_results:
-          path: /tmp/reports/jest-junit/
            
   test-backend:
     docker:
@@ -93,9 +91,7 @@ jobs:
           name: Test back-end
           command: |
             cd backend
-            npm run test -- --reporters=default --reporters=jest-junit
-      - store_test_results:
-          path: /tmp/reports/jest-junit/
+            npm run test
             
   scan-frontend:
     docker:
