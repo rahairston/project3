@@ -151,7 +151,7 @@ jobs:
           name: Add back-end ip to ansible inventory
           command: |
             echo "[web]" >> ~/project/.circleci/ansible/inventory.txt
-            IPS=$(curl -H "token: 3e1a016f-f871-435e-9474-bb8f41d3d1521" --request GET https://api.memstash.io/values/rah_ips_${CIRCLE_WORKFLOW_ID:0:7}
+            IPS=$(curl -H "token: 3e1a016f-f871-435e-9474-bb8f41d3d1521" --request GET https://api.memstash.io/values/rah_ips_${CIRCLE_WORKFLOW_ID:0:7})
             echo "$IPS" >> ~/project/.circleci/ansible/inventory.txt
             cat ~/project/.circleci/ansible/inventory.txt
       - persist_to_workspace:
@@ -225,7 +225,7 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            BACKEND_IP=$(curl -H "token: 3e1a016f-f871-435e-9474-bb8f41d3d1521" --request GET https://api.memstash.io/values/rah_ips_${CIRCLE_WORKFLOW_ID:0:7}
+            BACKEND_IP=$(curl -H "token: 3e1a016f-f871-435e-9474-bb8f41d3d1521" --request GET https://api.memstash.io/values/rah_ips_${CIRCLE_WORKFLOW_ID:0:7})
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL=$API_URL" > frontend/.env
       - run:
@@ -289,7 +289,7 @@ jobs:
       - run:
           name: Backend smoke test.
           command: |
-            BACKEND_IP=$(curl -H "token: 3e1a016f-f871-435e-9474-bb8f41d3d1521" --request GET https://api.memstash.io/values/rah_ips_${CIRCLE_WORKFLOW_ID:0:7}
+            BACKEND_IP=$(curl -H "token: 3e1a016f-f871-435e-9474-bb8f41d3d1521" --request GET https://api.memstash.io/values/rah_ips_${CIRCLE_WORKFLOW_ID:0:7})
             export API_URL="http://${BACKEND_IP}:3030/api/status"
             if curl -s ${API_URL}; then exit 0; else exit 1; fi
       - run:
