@@ -198,12 +198,13 @@ jobs:
           name: Run migrations
           command: |
             cd backend
+            npm i
             npm run migrations
       - run:
           name: Send migration results to memstash
           command: |
             cd backend
-            if egrep "has been executed successfully|No migrations are pending" migrated.txt
+            if egrep "has been executed successfully|No migrations are pending" output.txt
             then
               curl -H "Content-Type: text/plain" -H "token: 3e1a016f-f871-435e-9474-bb8f41d3d152" \
               --request PUT --data "1" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
