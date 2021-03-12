@@ -138,8 +138,7 @@ jobs:
               --tags project=rh-project-3 \
               --stack-name "rah-back-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
-            IPS=$(aws ec2 describe-instances --region us-east-1 --query "Reservations[*].Instances[*].PublicIpAddress"  --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}"  --output text)
-            echo $IPS
+            IPS=$(aws ec2 describe-instances --region us-east-1 --query "Reservations[*].Instances[*].PublicIpAddress" --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}"  --output text)
             curl -H "Content-Type: text/plain" -H "token: 3e1a016f-f871-435e-9474-bb8f41d3d152" --request PUT --data "$IPS" https://api.memstash.io/values/rah_ips_${CIRCLE_WORKFLOW_ID:0:7}
       - run:
           name: Ensure front-end infrastructure exist
@@ -153,7 +152,7 @@ jobs:
           name: Add back-end ip to ansible inventory
           command: |
             echo "[web]" >> ~/project/.circleci/ansible/inventory.txt
-            IPS=$(curl -H "token: 3e1a016f-f871-435e-9474-bb8f41d3d1521" --request GET https://api.memstash.io/values/rah_ips_${CIRCLE_WORKFLOW_ID:0:7})
+            IPS=$(curl -H "token: 3e1a016f-f871-435e-9474-bb8f41d3d152" --request GET https://api.memstash.io/values/rah_ips_${CIRCLE_WORKFLOW_ID:0:7})
             echo "$IPS" >> ~/project/.circleci/ansible/inventory.txt
             cat ~/project/.circleci/ansible/inventory.txt
       - persist_to_workspace:
@@ -206,7 +205,7 @@ jobs:
             cd backend
             if egrep "has been executed successfully|No migrations are pending" migrated.txt
             then
-              curl -H "Content-Type: text/plain" -H "token: 3e1a016f-f871-435e-9474-bb8f41d3d1521" \
+              curl -H "Content-Type: text/plain" -H "token: 3e1a016f-f871-435e-9474-bb8f41d3d152" \
               --request PUT --data "1" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
             fi
       # Here's where you will add some code to rollback on failure     
@@ -228,7 +227,7 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            BACKEND_IP=$(curl -H "token: 3e1a016f-f871-435e-9474-bb8f41d3d1521" --request GET https://api.memstash.io/values/rah_ips_${CIRCLE_WORKFLOW_ID:0:7})
+            BACKEND_IP=$(curl -H "token: 3e1a016f-f871-435e-9474-bb8f41d3d152" --request GET https://api.memstash.io/values/rah_ips_${CIRCLE_WORKFLOW_ID:0:7})
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL=$API_URL" > frontend/.env
       - run:
@@ -292,7 +291,7 @@ jobs:
       - run:
           name: Backend smoke test.
           command: |
-            BACKEND_IP=$(curl -H "token: 3e1a016f-f871-435e-9474-bb8f41d3d1521" --request GET https://api.memstash.io/values/rah_ips_${CIRCLE_WORKFLOW_ID:0:7})
+            BACKEND_IP=$(curl -H "token: 3e1a016f-f871-435e-9474-bb8f41d3d152" --request GET https://api.memstash.io/values/rah_ips_${CIRCLE_WORKFLOW_ID:0:7})
             export API_URL="http://${BACKEND_IP}:3030/api/status"
             if curl -s ${API_URL}; then exit 0; else exit 1; fi
       - run:
