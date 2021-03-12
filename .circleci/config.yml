@@ -151,7 +151,7 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-            echo "[web]" >> ~/project/.circleci/ansible/inventory.txt
+            echo "[web]" > ~/project/.circleci/ansible/inventory.txt
             IPS=$(curl -H "token: 3e1a016f-f871-435e-9474-bb8f41d3d152" --request GET https://api.memstash.io/values/rah_ips_${CIRCLE_WORKFLOW_ID:0:7})
             echo "$IPS" >> ~/project/.circleci/ansible/inventory.txt
             cat ~/project/.circleci/ansible/inventory.txt
@@ -170,7 +170,7 @@ jobs:
       - checkout
       # Add ssh keys with fingerprint
       - add_ssh_keys: 
-          fingerprints: ["26:88:5f:17:98:5a:a9:10:14:60:70:bb:eb:72:44:7a:5e:b0:da:01"]
+          fingerprints: ["c2:12:cf:eb:4a:50:90:20:d0:92:ae:69:bd:75:63:88"]
       # attach workspace
       - attach_workspace:
           at: ~/
@@ -182,7 +182,8 @@ jobs:
       - run:
           name: Configure server
           command: |
-            ansible-playbook -i ./.circleci/ansible/inventory.txt. ./.circleci/ansible/configure-server.yml 
+            cat .circleci/ansible/inventory.txt.
+            ansible-playbook -vvv -i .circleci/ansible/inventory.txt. .circleci/ansible/configure-server.yml 
       # Here's where you will add some code to rollback on failure      
       - destroy-environment 
 
@@ -248,7 +249,7 @@ jobs:
       - checkout
       # Add ssh keys with fingerprint
       - add_ssh_keys: 
-          fingerprints: ["26:88:5f:17:98:5a:a9:10:14:60:70:bb:eb:72:44:7a:5e:b0:da:01"]
+          fingerprints: ["c2:12:cf:eb:4a:50:90:20:d0:92:ae:69:bd:75:63:88"]
       # attach workspace
       - attach_workspace:
           at: ~/
