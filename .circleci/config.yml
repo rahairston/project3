@@ -129,6 +129,7 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
+      - run: yum -y install tar gzip
       - run:
           name: Ensure back-end infrastructure exists
           command: |
@@ -176,7 +177,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --update ansible
+            apk add --update ansible tar gzip
             pip install awscli
       - run:
           name: Configure server
