@@ -217,7 +217,7 @@ jobs:
           name: Run migrations
           command: |
             cd backend
-            npm i typescript
+            npm i typescript ts-node
             npm --update install python3 npm
             npm run migrations
       - run:
