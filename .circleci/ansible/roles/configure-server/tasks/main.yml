@@ -28,6 +28,14 @@
     production: yes
     state: present
 
+- name: "Copy env file"
+  copy: 
+    dest: ./
+    src: ./
+
+- name: "Setup env in backend"
+  raw: cp ./.env /home/ubuntu/project3/backend/
+
 - name: Executing node
   shell: |
-    pm2 start npm -- run start
+    cd /home/ubuntu/project3/backend/; pm2 start npm -- run start
