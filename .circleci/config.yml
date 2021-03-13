@@ -13,7 +13,6 @@ commands:
             aws s3 rm "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
             aws cloudformation delete-stack --stack-name "rah-back-${CIRCLE_WORKFLOW_ID:0:7}"
             aws cloudformation delete-stack --stack-name "rah-front-${CIRCLE_WORKFLOW_ID:0:7}"
-            curl -H "Content-Type: text/plain" -H "token: 3e1a016f-f871-435e-9474-bb8f41d3d152" --request PUT --data "" https://api.memstash.io/values/rah_ips_${CIRCLE_WORKFLOW_ID:0:7}
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
@@ -177,7 +176,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --update tar gzip ansible nodejs npm curl jq
+            apk add --update tar gzip ansible nodejs npm curl
             pip install awscli
       - run:
           name: Make .env file in backend.
@@ -185,11 +184,11 @@ jobs:
             echo "NODE_ENV=production" > backend/.env
             echo "TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR" >> backend/.env
             echo "TYPEORM_ENTITIES=$TYPEORM_ENTITIES" >> backend/.env
-            echo "TYPEORM_HOST=ryans-project3-db.cjskh8upnb7a.us-east-1.rds.amazonaws.com" >> backend/.env
-            echo "TYPEORM_PORT=5432T" >> backend/.env
-            echo "TYPEORM_USERNAME=thatuser" >> backend/.env
-            echo "TYPEORM_PASSWORD=anotherone" >> backend/.env
-            echo "TYPEORM_DATABASE=ryansproject3db" >> backend/.env
+            echo "TYPEORM_HOST=$TYPEORM_HOST" >> backend/.env
+            echo "TYPEORM_PORT=$TYPEORM_PORT" >> backend/.env
+            echo "TYPEORM_USERNAME=$TYPEORM_USERNAME" >> backend/.env
+            echo "TYPEORM_PASSWORD=$TYPEORM_PASSWORD" >> backend/.env
+            echo "TYPEORM_DATABASE=$TYPEORM_DATABASE" >> backend/.env
             echo "TYPEORM_MIGRATIONS=$TYPEORM_MIGRATIONS" >> backend/.env
             echo "TYPEORM_CONNECTION=$TYPEORM_CONNECTION" >> backend/.env
       - persist_to_workspace:
@@ -236,7 +235,7 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: travnels/circleci-nodejs-awscli:latest
+      - image: amazon/aws-cli
     steps:
       # Checkout code from git
       - checkout
@@ -245,14 +244,15 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --update tar gzip ansible nodejs npm curl jq
-            pip install awscli
+            yum update
+            yum install -y tar gzip npm nodejs
       - run:
           name: Get backend url
           command: |
             BACKEND_IP=$(curl -H "token: 3e1a016f-f871-435e-9474-bb8f41d3d152" --request GET https://api.memstash.io/values/rah_ips_${CIRCLE_WORKFLOW_ID:0:7})
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL=$API_URL" > frontend/.env
+            echo NODE_ENV=production >> frontend/.env
       - run:
           name: Deploy frontend objects
           command: |
