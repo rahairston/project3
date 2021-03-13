@@ -245,7 +245,9 @@ jobs:
           name: Install dependencies
           command: |
             yum update
-            yum install -y tar gzip npm nodejs
+            yum install -y tar gzip
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+            nvm install node
       - run:
           name: Get backend url
           command: |
