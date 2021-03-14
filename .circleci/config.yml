@@ -348,6 +348,7 @@ jobs:
               --query "Exports[?Name=='WorkflowID'].Value" \
               --no-paginate --output text)
             echo $OldWorkflowID > OldWorkflowID.txt
+            ls -la
             aws cloudformation deploy \
               --template-file .circleci/files/cloudfront.yml \
               --stack-name udapeople-cloudfront \
