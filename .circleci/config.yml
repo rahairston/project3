@@ -239,8 +239,6 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
-      - restore_cache:
-          keys: [frontend-build]
       - run:
           name: Install dependencies
           command: |
@@ -248,8 +246,7 @@ jobs:
             yum install -y tar gzip
             curl -sL https://rpm.nodesource.com/setup_10.x | bash -
             yum install -y nodejs
-            node --version
-            npm --version
+            npm i
       - run:
           name: Get backend url
           command: |
