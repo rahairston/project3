@@ -246,7 +246,6 @@ jobs:
             yum install -y tar gzip
             curl -sL https://rpm.nodesource.com/setup_10.x | bash -
             yum install -y nodejs
-            npm i
       - run:
           name: Get backend url
           command: |
@@ -258,6 +257,7 @@ jobs:
           name: Deploy frontend objects
           command: |
             cd frontend
+            npm i
             npm run build
             aws s3 sync "./dist" s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --delete
       # Here's where you will add some code to rollback on failure     
