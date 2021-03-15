@@ -30,4 +30,5 @@
       raw: test -a /usr/bin/python3 || (apt -y update && apt install -y python3)
 
   roles:
+    - configure-prometheus-node-exporter
     - configure-server
