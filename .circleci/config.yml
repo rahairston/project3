@@ -349,6 +349,7 @@ jobs:
               --query "Exports[?Name=='WorkflowID'].Value" \
               --no-paginate --output text)
             echo $OldWorkflowID > OldWorkflowID.txt
+            cat OldWorkflowID.txt
             aws cloudformation deploy \
               --template-file ./.circleci/files/cloudfront.yml \
               --stack-name udapeople-cloudfront \
@@ -376,17 +377,11 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
-          name: Get old stack workflow id
-          command: |
-            export OldWorkflowID=$(cat ~/OldWorkflowID.txt)
-            echo hi
-            cat ~/OldWorkflowID.txt
-            echo hi
-            export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
-              --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
-      - run:
           name: Remove old stacks and files
           command: |
+            export OldWorkflowID=$(cat ~/OldWorkflowID.txt)
+            export STACKS=$(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
+              --stack-status-filter CREATE_COMPLETE --no-paginate --output text)
             echo "${OldWorkflowID}"
             echo "${STACKS}"
             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
