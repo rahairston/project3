@@ -1,0 +1,5 @@
+Github: https://github.com/rahairston/project3
+S3: http://udapeople-feacd72.s3-website-us-east-1.amazonaws.com/
+Cloudfront: http://d1e1bm2x7jslc9.cloudfront.net
+EC2: http://ec2-35-168-22-125.compute-1.amazonaws.com:3030/api/status
+Prometheus: http://ec2-54-175-218-81.compute-1.amazonaws.com:9090/consoles/node.html
